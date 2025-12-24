@@ -39,6 +39,7 @@ jobs:
           gn gen out.gn/linux.${{ matrix.platform }}.release
           ninja v8_monolith -C out.gn/linux.${{ matrix.platform }}.release/
           gn args --list out.gn/linux.${{ matrix.platform }}.release
+          gzip -9 -c out.gn/linux.${{ matrix.platform }}.release/icudtl.dat  > ../icudtl-linux-${{ matrix.platform }}.dat.gz
           tar -zcvf ../include.tar.gz include
           tar -zcvf ../src.tar.gz src
           gzip -9 -c out.gn/linux.${{ matrix.platform }}.release/obj/libv8_monolith.a > ../libv8_monolith-linux-${{ matrix.platform }}.a.gz
@@ -79,7 +80,15 @@ jobs:
           asset_path: ${{ github.workspace }}/gen-linux-${{ matrix.platform }}.tar.gz
           asset_name: gen-linux-${{ matrix.platform }}.tar.gz
           asset_content_type: application/gzip
-
+      - name: Upload icudtl.dat
+        uses: actions/upload-release-asset@v1
+        env:
+          GITHUB_TOKEN: ${{ github.token }}
+        with:
+          upload_url: ${{ github.event.release.upload_url }}
+          asset_path: ${{ github.workspace }}/icudtl-linux-${{ matrix.platform }}.dat.gz
+          asset_name: icudtl-linux-${{ matrix.platform }}.dat.gz
+          asset_content_type: application/gzip
   build-mac:
 #    if: ${{ false }}  # disable
     name: mac
@@ -165,6 +174,7 @@ jobs:
         run: |
           Compress-Archive -Path ${{ github.workspace }}/v8/out.gn/${{ matrix.platform }}.release/obj/v8_monolith.lib -Destination ${{ github.workspace }}/libv8_monolith-win-${{ matrix.platform }}.zip
           Compress-Archive -Path ${{ github.workspace }}/v8/out.gn/${{ matrix.platform }}.release/gen -Destination ${{ github.workspace }}/gen-win-${{ matrix.platform }}.zip
+          Compress-Archive -Path ${{ github.workspace }}\v8\out.gn\${{ matrix.platform }}.release\icudtl.dat -Destination ${{ github.workspace }}\icudtl-win-${{ matrix.platform }}.zip
       - name: Upload static library
         uses: actions/upload-release-asset@v1
         env:
@@ -173,6 +183,15 @@ jobs:
           upload_url: ${{ github.event.release.upload_url }}
           asset_path: ${{ github.workspace }}/libv8_monolith-win-${{ matrix.platform }}.zip
           asset_name: libv8_monolith-win-${{ matrix.platform }}.zip
+          asset_content_type: application/zip
+      - name: Upload icudtl.dat
+        uses: actions/upload-release-asset@v1
+        env:
+          GITHUB_TOKEN: ${{ github.token }}
+        with:
+          upload_url: ${{ github.event.release.upload_url }}
+          asset_path: ${{ github.workspace }}/icudtl-win-${{ matrix.platform }}.zip
+          asset_name: icudtl-win-${{ matrix.platform }}.zip
           asset_content_type: application/zip
       - name: Upload generated source
         uses: actions/upload-release-asset@v1
