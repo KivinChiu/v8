@@ -62,14 +62,10 @@ jobs:
           path: ${{ github.workspace }}/gen-linux-${{ matrix.platform }}.tar.gz
           name: gen-linux-${{ matrix.platform }}.tar.gz
       - name: Upload icudtl.dat
-        uses: actions/upload-release-asset@v1
-        env:
-          GITHUB_TOKEN: ${{ github.token }}
+        uses: actions/upload-artifact@v4
         with:
-          upload_url: ${{ github.event.release.upload_url }}
-          asset_path: ${{ github.workspace }}/icudtl-linux-${{ matrix.platform }}.dat.gz
-          asset_name: icudtl-linux-${{ matrix.platform }}.dat.gz
-          asset_content_type: application/gzip
+          path: ${{ github.workspace }}/icudtl-linux-${{ matrix.platform }}.dat.gz
+          name: icudtl-linux-${{ matrix.platform }}.dat.gz
 
   build-linux-arm64:
     if: ${{ false }}  # disable
@@ -201,14 +197,10 @@ jobs:
           path: ${{ github.workspace }}/libv8_monolith-win-${{ matrix.platform }}.zip
           name: libv8_monolith-win-${{ matrix.platform }}.zip
       - name: Upload icudtl.dat
-        uses: actions/upload-release-asset@v1
-        env:
-          GITHUB_TOKEN: ${{ github.token }}
+        uses: actions/upload-artifact@v4
         with:
-          upload_url: ${{ github.event.release.upload_url }}
-          asset_path: ${{ github.workspace }}/icudtl-win-${{ matrix.platform }}.zip
-          asset_name: icudtl-win-${{ matrix.platform }}.zip
-          asset_content_type: application/zip
+          path: ${{ github.workspace }}/icudtl-win-${{ matrix.platform }}.zip
+          name: icudtl-win-${{ matrix.platform }}.zip
       - name: Upload generated source
         uses: actions/upload-artifact@v4
         with:
