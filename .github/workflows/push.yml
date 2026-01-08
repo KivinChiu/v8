@@ -60,6 +60,11 @@ jobs:
         with:
           path: ${{ github.workspace }}/gen-linux-${{ matrix.platform }}.tar.gz
           name: gen-linux-${{ matrix.platform }}.tar.gz
+      - name: Upload icudtl.dat
+        uses: actions/upload-artifact@v4
+        with:
+          path: ${{ github.workspace }}/icudtl-linux-${{ matrix.platform }}.dat.gz
+          name: icudtl-linux-${{ matrix.platform }}.dat.gz
 
   build-linux-arm64:
     if: ${{ false }}  # disable
@@ -189,6 +194,11 @@ jobs:
         with:
           path: ${{ github.workspace }}/libv8_monolith-win-${{ matrix.platform }}.zip
           name: libv8_monolith-win-${{ matrix.platform }}.zip
+      - name: Upload icudtl.dat
+        uses: actions/upload-artifact@v4
+        with:
+          path: ${{ github.workspace }}/icudtl-win-${{ matrix.platform }}.zip
+          name: icudtl-win-${{ matrix.platform }}.zip
       - name: Upload generated source
         uses: actions/upload-artifact@v4
         with:
