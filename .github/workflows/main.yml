@@ -39,6 +39,7 @@ jobs:
           gn gen out.gn/linux.${{ matrix.platform }}.release
           ninja v8_monolith -C out.gn/linux.${{ matrix.platform }}.release/
           gn args --list out.gn/linux.${{ matrix.platform }}.release
+          gzip -9 -c out.gn/linux.${{ matrix.platform }}.release/icudtl.dat  > ../icudtl-linux-${{ matrix.platform }}.dat.gz
           tar -zcvf ../include.tar.gz include
           tar -zcvf ../src.tar.gz src
           gzip -9 -c out.gn/linux.${{ matrix.platform }}.release/obj/libv8_monolith.a > ../libv8_monolith-linux-${{ matrix.platform }}.a.gz
@@ -174,6 +175,7 @@ jobs:
         run: |
           Compress-Archive -Path ${{ github.workspace }}/v8/out.gn/${{ matrix.platform }}.release/obj/v8_monolith.lib -Destination ${{ github.workspace }}/libv8_monolith-win-${{ matrix.platform }}.zip
           Compress-Archive -Path ${{ github.workspace }}/v8/out.gn/${{ matrix.platform }}.release/gen -Destination ${{ github.workspace }}/gen-win-${{ matrix.platform }}.zip
+          Compress-Archive -Path ${{ github.workspace }}\v8\out.gn\${{ matrix.platform }}.release\icudtl.dat -Destination ${{ github.workspace }}\icudtl-win-${{ matrix.platform }}.zip
       - name: Upload static library
         uses: actions/upload-release-asset@v1
         env:
